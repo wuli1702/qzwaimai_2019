@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="warn">
+    <appenders>
+
+        <!--本地启动控制台输出-->
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="%d{yyyy/MM/dd HH:mm:ss.SSS} %t [%p] %c{1} (%F:%L) %msg%n"/>
+        </Console>
+
+        <!--异步磁盘日志配置示例-->
+        <!--按天&20GB文件大小切分日志，默认最多保留30个日志文件-->
+        <XMDFile name="Server_Log" fileName="${sys:app.key}.log" xmdFilePath="/var/sankuai/logs"
+                 sizeBasedTriggeringSize="20GB" includeLocation="true">
+            <!--可以不配Layout，使用sdk默认的-->
+            <PatternLayout pattern="%d %-5p (%F:%L) - %m%n"/>
+        </XMDFile>
+
+        <!--ERROR日志上报-->
+        <Scribe name="ScribeAppender">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <LcLayout/>
+        </Scribe>
+        <Async name="Error_Log" blocking="false">
+            <AppenderRef ref="ScribeAppender"/>
+        </Async>
+
+        <XMDFile name="Jmonitor_Log" fileName="jmonitor.log" xmdFilePath="/var/sankuai/logs">
+        </XMDFile>
+        <XMDFile name="Jmonitor_Logstore_Log" fileName="jmonitor.logstore.log" xmdFilePath="/var/sankuai/logs">
+        </XMDFile>
+        <CraneAppender name="Crane"/>
+    </appenders>
+
+    <loggers>
+        <!-- Application Loggers -->
+        <logger name="com.sankuai.meituan" level="info">
+        </logger>
+        <logger name="com.meituan.push" level="info">
+        </logger>
+        <!-- 3rdparty Loggers -->
+        <logger name="org.springframework.core" level="info">
+        </logger>
+
+        <logger name="org.springframework.beans" level="info">
+        </logger>
+
+        <logger name="org.springframework.context" level="info">
+        </logger>
+
+        <logger name="org.springframework.web" level="info">
+        </logger>
+
+        <logger name="jmonitor" additivity="false" level="info">
+            <appender-ref ref="Jmonitor_Log"/>
+        </logger>
+        <logger name="jmonitorlogstore" additivity="false" level="info">
+            <appender-ref ref="Jmonitor_Logstore_Log"/>
+        </logger>
+        <root level="info">
+            <!--<appender-ref ref="Console"/>-->
+            <appender-ref ref="Server_Log"/>
+            <appender-ref ref="Error_Log"/>
+            <AppenderRef ref="Crane"/>
+        </root>
+    </loggers>
+</configuration>

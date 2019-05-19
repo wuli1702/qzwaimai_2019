@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sankuai.meituan.qz.waimai.dao.WmOrderDao">
+
+    <resultMap id="order" type="com.sankuai.meituan.qz.waimai.domain.WmOrder">
+        <result property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="status" column="status"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="addr" column="addr"/>
+        <result property="info" column="info"/>
+        <result property="extendInfo" column="extend_info"/>
+        <result property="currentPrice" column="current_price"/>
+        <result property="origPrice" column="orig_price"/>
+        <result property="ctime" column="ctime"/>
+    </resultMap>
+
+    <select id="pageQuery" resultMap="order">
+        select * from wm_order where customer_id=#{customerId} order by ctime desc limit #{offset},#{pageSize};
+</select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(1) from wm_order where customer_id=#{customerId}
+    </select>
+
+    <insert id="insert" parameterType="com.sankuai.meituan.qz.waimai.domain.WmOrder"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into wm_order
+        (
+        type,
+        status,
+        customer_id,
+        addr,
+        info,
+        extend_info,
+        current_price,
+        orig_price,
+        ctime
+        )values (
+        #{type},
+        #{status},
+        #{customerId},
+        #{addr},
+        #{info},
+        #{extendInfo},
+        #{currentPrice},
+        #{origPrice},
+        unix_timestamp()
+        )
+    </insert>
+
+</mapper>

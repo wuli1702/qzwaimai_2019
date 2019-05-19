@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sankuai.meituan.qz.waimai.dao.WmProductDao">
+    <resultMap id="product" type="com.sankuai.meituan.qz.waimai.domain.WmProduct">
+        <result property="id" column="id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="name" column="name"/>
+        <result property="sequence" column="sequence"/>
+        <result property="pic" column="pic"/>
+        <result property="desc" column="desc"/>
+        <result property="currentPrice" column="current_price"/>
+        <result property="origPrice" column="orig_price"/>
+    </resultMap>
+
+    <sql id="tableName">
+        wm_product
+    </sql>
+
+    <select id="getAllProduct" resultMap="product">
+        select * from
+        <include refid="tableName"/>
+        where display_status=1 order by sequence
+    </select>
+</mapper>

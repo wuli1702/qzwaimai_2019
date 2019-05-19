@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sankuai.meituan.qz.waimai.dao.WmPosterDao">
+
+    <resultMap id="poster" type="com.sankuai.meituan.qz.waimai.domain.WmPoster">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="sequence" column="sequence"/>
+        <result property="coverPic" column="cover_pic"/>
+        <result property="landingPic" column="landing_pic"/>
+    </resultMap>
+
+    <sql id="tableName">
+        wm_poster
+    </sql>
+
+    <select id="getAllPosters" resultMap="poster">
+        select * from
+        <include refid="tableName"/>
+        where display_status=1
+        order by sequence
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(1) from
+        <include refid="tableName"/>
+    </select>
+</mapper>
