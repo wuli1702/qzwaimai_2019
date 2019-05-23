@@ -20,7 +20,7 @@ public class InfoApi {
     @RequestMapping(method = RequestMethod.POST, value = "/login")
     public Object signIn(@RequestParam("phone") String phone, @RequestParam("code") String code) {
         Customer customer;
-        if ((customer = infoService.signIn(phone, code)) != null) {
+        if ((customer = infoService.signIn(phone, code)) == null) {
             return ResponseUtil.respOf(400, "注册手机或密码错误", "");
         }
         return ResponseUtil.respSuccessOf(customer);
